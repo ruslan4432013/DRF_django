@@ -10,6 +10,7 @@ django-filter = "*"
 django = "*"
 django-cors-headers = "*"
 factory-boy = "*"
+djangorestframework-camel-case = "*"
 
 [dev-packages]
 
