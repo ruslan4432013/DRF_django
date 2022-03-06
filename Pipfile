@@ -9,6 +9,7 @@ markdown = "*"
 django-filter = "*"
 django = "*"
 django-cors-headers = "*"
+factory-boy = "*"
 
 [dev-packages]
 
