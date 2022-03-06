@@ -15,8 +15,8 @@ class Project(models.Model):
 
 class ToDo(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid4)
-    project = models.OneToOneField(to=Project, verbose_name='Проект', on_delete=models.CASCADE)
-    user = models.OneToOneField(to=User, verbose_name='Создатель заметки', on_delete=models.CASCADE)
+    project = models.ForeignKey(to=Project, verbose_name='Проект', on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, verbose_name='Создатель заметки', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Текст заметки')
     active = models.BooleanField(verbose_name='Активна', default=True)
     created_at = models.DateTimeField(auto_now_add=True)
