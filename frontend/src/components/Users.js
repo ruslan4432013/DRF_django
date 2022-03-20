@@ -4,13 +4,13 @@ const UserItem = ({user}) => {
     return (
         <tr>
             <td>
-                {user.first_name}
+                {user.firstName}
             </td>
             <td>
-                {user.last_name}
+                {user.lastName}
             </td>
             <td>
-                {user.birthday_date}
+                {user.birthdayDate}
             </td>
             <td>
                 {user.email}

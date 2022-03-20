@@ -1,36 +1,74 @@
-import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import UserList from './components/Users.js';
 import MenuItem from './components/Menu.js';
 import FooterItem from './components/Footer.js'
+import {Route, BrowserRouter, Routes, Link} from "react-router-dom";
 import axios from 'axios';
+import {ProjectList, ProjectDetail} from "./components/Projects";
+import TodoList from "./components/TodoList";
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            'users': []
+            'users': [],
+            'projects': [],
+            'todo_list': []
         }
     }
 
     componentDidMount() {
         axios.get('http://127.0.0.1:8000/api/users/')
             .then(response => {
-                const users = response.data
-                    this.setState(
-                        {
-                            'users': users
-                        }
-                    )
+                const users = response.data.results
+                this.setState(
+                    {
+                        'users': users
+                    }
+                )
+            }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/api/projects')
+            .then(response => {
+                const projects = response.data.results
+                this.setState(
+                    {
+                        'projects': projects
+                    }
+                )
+            }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/api/todo-list/')
+            .then(response => {
+                const todo_list = response.data.results
+                this.setState(
+                    {
+                        'todo_list': todo_list
+                    }
+                )
             }).catch(error => console.log(error))
     }
+
     render() {
         return (
 
-            <div>
+            <div className="App">
+
                 <MenuItem menu={'Menu'}/>
-                <UserList users={this.state.users}/>
+                <BrowserRouter>
+                    <Link style={{padding: "5px"}} to="/">Users</Link>
+                    <Link style={{padding: "5px"}} to="/projects">Projects</Link>
+                    <Link style={{padding: "5px"}} to="/todo">ToDo_List</Link>
+                    <Routes>
+                        <Route path="/" element={<UserList users={this.state.users}/>}/>
+                        <Route path="/projects" element={<ProjectList projects={this.state.projects}/>}/>
+                        <Route path="/todo" element={<TodoList todo_list={this.state.todo_list}/>}/>
+                        <Route path="/project/:name" element={<ProjectDetail items={this.state.projects}/>}/>
+
+
+                    </Routes>
+                </BrowserRouter>
                 <FooterItem footer={'Footer'}/>
             </div>
         )
