@@ -19,36 +19,20 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/users/')
-            .then(response => {
-                const users = response.data.results
-                this.setState(
-                    {
-                        'users': users
-                    }
-                )
-            }).catch(error => console.log(error))
-
-        axios.get('http://127.0.0.1:8000/api/projects')
-            .then(response => {
-                const projects = response.data.results
-                this.setState(
-                    {
-                        'projects': projects
-                    }
-                )
-            }).catch(error => console.log(error))
-
-        axios.get('http://127.0.0.1:8000/api/todo-list/')
-            .then(response => {
-                const todo_list = response.data.results
-                this.setState(
-                    {
-                        'todo_list': todo_list
-                    }
-                )
-            }).catch(error => console.log(error))
+        axios.all([
+            axios.get('http://127.0.0.1:8000/api/users/'),
+            axios.get('http://127.0.0.1:8000/api/projects'),
+            axios.get('http://127.0.0.1:8000/api/todo-list/')
+        ]).then(axios.spread((users, projects, todo_list) => {
+            this.setState({
+                'users': users.data.results,
+                'projects': projects.data.results,
+                'todo_list': todo_list.data.results,
+            })
+        })).catch(error => console.log(error))
     }
+
+
 
     render() {
         return (

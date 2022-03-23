@@ -30,40 +30,27 @@ const ProjectList = ({projects}) => {
 
 const ProjectDetailItem = ({project}) => {
     let user_list = '['
-    project.users.forEach((user) => { user_list +=`${user.firstName}, `})
-    user_list += ']'
+    project.users.forEach((user) => {
+        user_list += `${user.firstName}, `
+    })
+    console.log(project)
+    user_list = user_list.slice(0, -2) + ']'
     return (
-        <tr>
-            <td>
-                {project.name}
-            </td>
-            <td style={{color:'green'}}>
-                {user_list}
-            </td>
-            <td>
-                {project.urlToRepo}
-            </td>
-        </tr>
+        <div>
+            <div><h1>Название проекта: <span style={{color: 'green'}}>{project.name}</span></h1></div>
+            <div><h1>Список пользователей: {user_list}</h1></div>
+            <div><b>Ссылка на репозиторий</b> {project.urlToRepo}</div>
+        </div>
+
+
     )
 }
 
 const ProjectDetail = ({items}) => {
     let {name} = useParams()
     let filtered_items = items.filter((item) => item.name === name)
-    console.log(name)
     return (
-        <table>
-            <th>
-                Name of project
-            </th>
-            <th>
-                Users
-            </th>
-            <th>
-                Url to repo
-            </th>
-            {filtered_items.map((item) => <ProjectDetailItem project={item}/>)}
-        </table>
+        <div>{filtered_items.map((item) => <ProjectDetailItem project={item}/>)}</div>
     )
 }
 
