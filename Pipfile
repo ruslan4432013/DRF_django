@@ -11,6 +11,7 @@ django = "*"
 django-cors-headers = "*"
 factory-boy = "*"
 djangorestframework-camel-case = "*"
+requests = "*"
 
 [dev-packages]
 

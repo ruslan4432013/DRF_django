@@ -8,6 +8,7 @@ class Project(models.Model):
     name = models.CharField(verbose_name="Название проекта", max_length=255)
     url_to_repo = models.URLField(verbose_name="URL проекта", blank=True, null=True)
     users = models.ManyToManyField(to=User, verbose_name='Участники', related_name='projects', blank=True)
+    owner = models.ForeignKey(to=User, verbose_name="Владелец проекта", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
