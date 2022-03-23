@@ -1,5 +1,4 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import DestroyAPIView
 from .serializers import ToDoSerializer, ProjectSerializer
 from .models import ToDo, Project
 from rest_framework.pagination import LimitOffsetPagination
