@@ -12,6 +12,7 @@ django-cors-headers = "*"
 factory-boy = "*"
 djangorestframework-camel-case = "*"
 requests = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
