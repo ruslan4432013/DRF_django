@@ -7,6 +7,8 @@ import {Route, BrowserRouter, Routes, Link} from "react-router-dom";
 import axios from 'axios';
 import {ProjectList, ProjectDetail} from "./components/Projects";
 import TodoList from "./components/TodoList";
+import LoginForm from "./components/Auth";
+
 
 class App extends React.Component {
     constructor(props) {
@@ -36,24 +38,17 @@ class App extends React.Component {
 
     render() {
         return (
-
-            <div className="App">
-
-                <MenuItem menu={'Menu'}/>
+            <div>
                 <BrowserRouter>
-                    <Link style={{padding: "5px"}} to="/">Users</Link>
-                    <Link style={{padding: "5px"}} to="/projects">Projects</Link>
-                    <Link style={{padding: "5px"}} to="/todo">ToDo_List</Link>
+                    <MenuItem/>
                     <Routes>
                         <Route path="/" element={<UserList users={this.state.users}/>}/>
                         <Route path="/projects" element={<ProjectList projects={this.state.projects}/>}/>
                         <Route path="/todo" element={<TodoList todo_list={this.state.todo_list}/>}/>
                         <Route path="/project/:name" element={<ProjectDetail items={this.state.projects}/>}/>
-
-
+                        <Route path="/login" element={<LoginForm/>}/>
                     </Routes>
                 </BrowserRouter>
-                <FooterItem footer={'Footer'}/>
             </div>
         )
     }
