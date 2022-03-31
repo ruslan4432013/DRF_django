@@ -17,14 +17,11 @@ const MenuItem = ({helper, username}) => {
                     <Nav.Link><Link className="link-light" to="/todo">ToDo List</Link></Nav.Link>
                 </Nav>
                 <Nav>
-                    <Nav.Item><h1 className="link-light">{helper.is_authenticated() ? username : ''}</h1></Nav.Item>
                     <Nav.Link> {helper.is_authenticated() ? <Button className="me-5"
-                        onClick={() => helper.logout()}>Logout</Button> : <Link className="me-5" to='/login'>Login</Link>}
-
+                        onClick={() => helper.logout()}>Logout from {username}</Button> : <Link className="me-5" to='/login'>Login</Link>}
                     </Nav.Link>
                 </Nav>
             </Navbar.Collapse>
-
         </Navbar>
     )
 }

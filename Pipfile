@@ -13,6 +13,8 @@ factory-boy = "*"
 djangorestframework-camel-case = "*"
 requests = "*"
 djangorestframework-simplejwt = "*"
+mixer = "*"
+coverage = "*"
 
 [dev-packages]
 
