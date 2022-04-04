@@ -4,6 +4,9 @@ from todoapp.models import Project, ToDo
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
 
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
@@ -14,4 +17,3 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         if isinstance(obj, ToDo):
             return obj.project.owner == request.user
-
