@@ -2,8 +2,7 @@ import './App.css';
 import React from 'react';
 import UserList from './components/Users.js';
 import MenuItem from './components/Menu.js';
-import FooterItem from './components/Footer.js'
-import {Route, BrowserRouter, Routes, Link} from "react-router-dom";
+import {Route, BrowserRouter, Routes} from "react-router-dom";
 import axios from 'axios';
 import {ProjectList, ProjectDetail} from "./components/Projects";
 import TodoList from "./components/TodoList";

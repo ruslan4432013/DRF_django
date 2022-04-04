@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link, useParams} from 'react-router-dom';
+import {Table} from "react-bootstrap";
 
 const ProjectItem = ({project}) => {
     return (
@@ -16,15 +17,21 @@ const ProjectItem = ({project}) => {
 
 const ProjectList = ({projects}) => {
     return (
-        <table>
-            <th>
-                Name of project
-            </th>
-            <th>
-                Url to repository
-            </th>
+        <Table striped bordered hover>
+            <thead>
+            <tr>
+                <th>
+                    Name of project
+                </th>
+                <th>
+                    Url to repository
+                </th>
+            </tr>
+            </thead>
+            <tbody>
             {projects.map((project) => <ProjectItem project={project}/>)}
-        </table>
+            </tbody>
+        </Table>
     )
 }
 
