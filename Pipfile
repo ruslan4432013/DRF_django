@@ -11,6 +11,12 @@ django = "*"
 django-cors-headers = "*"
 factory-boy = "*"
 djangorestframework-camel-case = "*"
+requests = "*"
+djangorestframework-simplejwt = "*"
+mixer = "*"
+coverage = "*"
+drf-yasg = "*"
+permission = "*"
 
 [dev-packages]
 

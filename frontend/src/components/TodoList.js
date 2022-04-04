@@ -1,4 +1,5 @@
 import React from 'react';
+import {Table} from "react-bootstrap";
 
 const ToDoItem = ({todo}) => {
     return (
@@ -18,18 +19,18 @@ const ToDoItem = ({todo}) => {
 
 const ToDoList = ({todo_list}) => {
     return (
-        <table>
-            <th>
-                User
-            </th>
-            <th>
-                Project
-            </th>
-            <th>
-                Text
-            </th>
+        <Table striped bordered hover>
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Project</th>
+                <th>Text</th>
+            </tr>
+            </thead>
+            <tbody>
             {todo_list.map((todo) => <ToDoItem todo={todo}/>)}
-        </table>
+            </tbody>
+        </Table>
     )
 }
 
