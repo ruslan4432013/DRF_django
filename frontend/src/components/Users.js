@@ -1,16 +1,17 @@
 import React from 'react';
+import {Table} from "react-bootstrap";
 
 const UserItem = ({user}) => {
     return (
         <tr>
             <td>
-                {user.first_name}
+                {user.firstName}
             </td>
             <td>
-                {user.last_name}
+                {user.lastName}
             </td>
             <td>
-                {user.birthday_date}
+                {user.birthdayDate}
             </td>
             <td>
                 {user.email}
@@ -21,21 +22,19 @@ const UserItem = ({user}) => {
 
 const UserList = ({users}) => {
     return (
-        <table>
-            <th>
-                First Name
-            </th>
-            <th>
-                Last Name
-            </th>
-            <th>
-                Birthday Date
-            </th>
-            <th>
-                Email
-            </th>
+        <Table striped bordered hover>
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Birthday Date</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
             {users.map((user) => <UserItem user={user}/>)}
-        </table>
+            </tbody>
+        </Table>
     )
 }
 
