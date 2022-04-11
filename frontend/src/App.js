@@ -2,12 +2,15 @@ import './App.css';
 import React from 'react';
 import UserList from './components/Users.js';
 import MenuItem from './components/Menu.js';
-import {Route, BrowserRouter, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import axios from 'axios';
-import {ProjectList, ProjectDetail} from "./components/Projects";
+import {ProjectDetail, ProjectList} from "./components/Projects";
 import TodoList from "./components/TodoList";
 import LoginForm from "./components/Auth";
 import Cookies from "universal-cookie/es6";
+import ProjectForm from "./components/ProjectForm";
+import NotifyForm from "./components/NotifyForm";
+import {ProjectFormUpdate} from "./components/ProjectFormUpdate";
 
 
 class App extends React.Component {
@@ -17,6 +20,7 @@ class App extends React.Component {
             'users': [],
             'projects': [],
             'todo_list': [],
+            'filtered_projects': [],
             'access_token': '',
             'refresh_token': '',
             'username': ''
@@ -78,6 +82,7 @@ class App extends React.Component {
             this.setState({
                 'users': users.data.results,
                 'projects': projects.data.results,
+                'filtered_projects': projects.data.results,
                 'todo_list': todo_list.data.results,
             })
         })).catch(error => {
@@ -86,6 +91,7 @@ class App extends React.Component {
                 'users': [],
                 'projects': [],
                 'todo_list': [],
+                'filtered_projects': [],
                 'username': ''
             })
         })
@@ -112,6 +118,72 @@ class App extends React.Component {
         return headers
     }
 
+    deleteProject(projectUrl) {
+        const headers = this.get_headers()
+        axios.delete(`${projectUrl}`, {headers}).then(response => {
+            this.setState({projects: this.state.projects.filter((item) => item.url !== projectUrl)})
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    createProject(name, urlToRepo, ownerUrl) {
+        const headers = this.get_headers()
+        const data = {name: name, url_to_repo: urlToRepo, owner: ownerUrl}
+        axios.post('http://127.0.0.1:8000/api/projects/', data, {headers}).then(response => {
+            let new_project = response.data
+            new_project.owner = this.state.users.filter((item) => item.url === new_project.owner)[0]
+            this.setState({projects: [...this.state.projects, new_project]})
+        }).catch(error => console.log(error))
+
+    }
+
+    updateProject(projectUid, name, urlToRepo, ownerUrl) {
+        const headers = this.get_headers()
+        const data = {uid: projectUid, name: name, url_to_repo: urlToRepo, owner: ownerUrl}
+        axios.put(`http://127.0.0.1:8000/api/projects/${projectUid}/`, data, {headers}).then(response => {
+
+            let project = this.state.projects.filter((item) => item.uid === projectUid)[0]
+            this.setState({projects: this.state.projects.filter((item) => item.uid !== projectUid)})
+            project.name = name
+            project.urlToRepo = urlToRepo
+            project.owner = this.state.users.filter((item) => item.url = ownerUrl)[0]
+            this.setState({projects: [...this.state.projects, project]})
+        }).catch(error => console.log(error))
+
+    }
+
+    deleteNotify(uid) {
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/todo-list/${uid}`, {headers}).then(response => {
+            this.setState({todo_list: this.state.todo_list.filter((item) => item.uid !== uid)})
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    createNotify(user, project, text) {
+        const headers = this.get_headers()
+        const data = {project: project, user: user, text: text}
+        axios.post('http://127.0.0.1:8000/api/todo-list/', data, {headers}).then(response => {
+            let new_notify = response.data
+            new_notify.user = this.state.users.filter((item) => item.uid === new_notify.user)[0].username
+            new_notify.project = this.state.projects.filter((item) => item.uid === new_notify.project)[0].name
+            this.setState({todo_list: [...this.state.todo_list, new_notify]})
+        }).catch(error => console.log(error))
+    }
+
+    handleInputChange(event) {
+        const query = event.target.value
+        let filteredItems = this.state.projects.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
+        let allItems = this.state.projects
+        if (query) {
+            this.setState({filtered_projects: filteredItems})
+        } else {
+            this.setState({filtered_projects: allItems})
+        }
+    }
+
 
     componentDidMount() {
         this.get_token_from_storage()
@@ -120,15 +192,28 @@ class App extends React.Component {
 
 
     render() {
+
         return (
             <div>
                 <BrowserRouter>
-                    <MenuItem helper={(this)} username={this.state.username}/>
+                    <MenuItem helper={(this)} handleInputChange={(event) => this.handleInputChange(event)}
+                              username={this.state.username}/>
                     <Routes>
                         <Route path="/" element={<UserList users={this.state.users}/>}/>
-                        <Route path="/projects" element={<ProjectList projects={this.state.projects}/>}/>
-                        <Route path="/todo" element={<TodoList todo_list={this.state.todo_list}/>}/>
+
+                        <Route path="/projects" element={<ProjectList projects={this.state.filtered_projects}
+                                                                      deleteProject={(url) => this.deleteProject(url)}/>}/>
+                        <Route path="/todo" element={<TodoList deleteNotify={(uid) => this.deleteNotify(uid)}
+                                                               todo_list={this.state.todo_list}/>}/>
                         <Route path="/project/:name" element={<ProjectDetail items={this.state.projects}/>}/>
+                        <Route path="/project/create" element={<ProjectForm users={this.state.users}
+                                                                            createProject={(name, urlToRepo, ownerUrl) => this.createProject(name, urlToRepo, ownerUrl)}/>}/>
+                        <Route path="/project/update/:uid"
+                               element={<ProjectFormUpdate items={this.state.projects} users={this.state.users}
+                                                           updateProject={(projectUrl, name, urlToRepo, ownerUrl) => this.updateProject(projectUrl, name, urlToRepo, ownerUrl)}/>}/>
+                        <Route path="/notify/create" element={<NotifyForm users={this.state.users}
+                                                                          projects={this.state.projects}
+                                                                          createNotify={(user, project, text) => this.createNotify(user, project, text)}/>}/>
                         <Route path="/login" element={<LoginForm
                             get_token={(username, password) => this.get_token(username, password)}/>}/>
                     </Routes>
@@ -137,5 +222,6 @@ class App extends React.Component {
         )
     }
 }
+
 
 export default App;

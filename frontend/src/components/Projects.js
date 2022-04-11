@@ -1,8 +1,9 @@
 import React from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {Table} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
-const ProjectItem = ({project}) => {
+const ProjectItem = ({project, deleteProject}) => {
     return (
         <tr>
             <td>
@@ -11,11 +12,18 @@ const ProjectItem = ({project}) => {
             <td>
                 {project.urlToRepo}
             </td>
+            <td>
+                <Button variant="danger" onClick={() => deleteProject(project.url)}>Delete</Button>
+            </td>
+            <td>
+                <Link to={`/project/update/${project.uid}`} className='btn btn-primary'>Update</Link>
+            </td>
         </tr>
     )
 }
 
-const ProjectList = ({projects}) => {
+const ProjectList = ({projects, deleteProject}) => {
+
     return (
         <Table striped bordered hover>
             <thead>
@@ -26,10 +34,13 @@ const ProjectList = ({projects}) => {
                 <th>
                     Url to repository
                 </th>
+                <th>
+                    <Link to="/project/create" className='btn btn-success'>Create project</Link>
+                </th>
             </tr>
             </thead>
             <tbody>
-            {projects.map((project) => <ProjectItem project={project}/>)}
+            {projects.map((project) => <ProjectItem project={project} deleteProject={deleteProject}/>)}
             </tbody>
         </Table>
     )

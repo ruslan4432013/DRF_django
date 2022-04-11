@@ -8,7 +8,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = ('url', 'uid', 'users', 'name', 'url_to_repo', 'owner')
 
 
 class ToDoSerializer(serializers.ModelSerializer):

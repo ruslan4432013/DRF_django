@@ -1,10 +1,9 @@
 import React from 'react';
-import {Nav, Navbar} from "react-bootstrap";
+import {Form, FormControl, Nav, Navbar} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
-const MenuItem = ({helper, username}) => {
-
+const MenuItem = ({helper, username, handleInputChange}) => {
     return (
         <Navbar collapseOnSelect expand="sm" bg="dark" variant="dark">
 
@@ -16,11 +15,24 @@ const MenuItem = ({helper, username}) => {
                     <Nav.Link><Link className="link-light" to="/projects">Projects</Link></Nav.Link>
                     <Nav.Link><Link className="link-light" to="/todo">ToDo List</Link></Nav.Link>
                 </Nav>
+                <Form className="d-flex">
+                    <FormControl
+                        onChange={(event)=> handleInputChange(event)}
+                        type="search"
+                        placeholder="Search project"
+                        className="me-2"
+                        aria-label="Search"
+                    />
+                </Form>
                 <Nav>
                     <Nav.Link> {helper.is_authenticated() ? <Button className="me-5"
-                        onClick={() => helper.logout()}>Logout from {username}</Button> : <Link className="me-5" to='/login'>Login</Link>}
+                                                                    onMouseOver={(event) => event.target.textContent='Logout'}
+                                                                    onMouseOut={(event) => event.target.textContent=`${username}`}
+                                                                    onClick={() => helper.logout()}>{username}</Button> :
+                        <Link className="me-5 btn btn-primary" to='/login'>Login</Link>}
                     </Nav.Link>
                 </Nav>
+
             </Navbar.Collapse>
         </Navbar>
     )
