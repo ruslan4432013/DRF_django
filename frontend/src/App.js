@@ -61,6 +61,25 @@ class App extends React.Component {
         this.set_user('')
     }
 
+    refresh_token() {
+        axios.post('http://127.0.0.1:8000/api/v1/token/refresh/', {
+            'refresh': this.state.refresh_token
+        }).then(response => {
+            console.log('refresh')
+            this.set_tokens(response.data['access'], this.state.refresh_token);
+        }).catch(error => {
+            console.log(error)
+            this.logout()
+            this.setState({
+                'users': [],
+                'projects': [],
+                'todo_list': [],
+                'filtered_projects': [],
+                'username': ''
+            })
+        })
+    }
+
     get_token_from_storage() {
         const cookies = new Cookies()
         const access_token = cookies.get('access_token')
@@ -86,14 +105,7 @@ class App extends React.Component {
                 'todo_list': todo_list.data.results,
             })
         })).catch(error => {
-            console.log(error)
-            this.setState({
-                'users': [],
-                'projects': [],
-                'todo_list': [],
-                'filtered_projects': [],
-                'username': ''
-            })
+            this.refresh_token()
         })
     }
 
