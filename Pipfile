@@ -16,7 +16,8 @@ djangorestframework-simplejwt = "*"
 mixer = "*"
 coverage = "*"
 drf-yasg = "*"
-permission = "*"
+graphene-django = "*"
+notifications = "*"
 
 [dev-packages]
 
