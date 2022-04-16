@@ -20,7 +20,6 @@ class ProjectViewSet(ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     filter_class = ProjectFilter
-    pagination_class = ProjectLimitOffsetPagination
     permission_classes = [IsAdminUser|IsOwnerOrReadOnly]
 
 
