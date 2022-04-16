@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
         projects = []
         for _ in range(NUM_PROJECT):
-            project = ProjectFactory()
+            project = ProjectFactory(owner=random.choice(people))
             users = random.choices(people, k=USERS_PER_CLUB)
             project.users.add(*users)
             projects.append(project)
